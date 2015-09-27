@@ -116,50 +116,31 @@ radius | 25000 | A integer that represents the radius of the search area. Maximu
 
 **This endpoint does not need to be authenticated**
 
-## Get a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
-```
+## Get a Specific Pin
 
 > The above command returns JSON structured like this:
 
 ```json
 {
-  "id": 2,
-  "name": "Isis",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+  "pin_id": 1356674,
+  "coordinates": [-77.69531, 33.578],
+  "name": "Bob's Burgers",
+  "hashtags": ["burger", "restaurant"],
+  "entries": null,
+  "bounties": null
 }
 ```
 
-This endpoint retrieves a specific kitten.
+This endpoint retrieves a specific pin.
 
-<aside class="warning">If you're not using an administrator API key, note that some kittens will return 403 Forbidden if they are hidden for admins only.</aside>
+<aside class="warning">Note that some pins will return 403 Forbidden if they are hidden for admins only.</aside>
 
 ### HTTP Request
 
-`GET http://example.com/kittens/<ID>`
+`GET http://example.com/api/pin/<ID>`
 
 ### URL Parameters
 
 Parameter | Description
 --------- | -----------
-ID | The ID of the kitten to retrieve
-
+ID | The ID of the pin to retrieve
