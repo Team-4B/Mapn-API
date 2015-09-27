@@ -17,6 +17,9 @@ search: true
 
 Welcome to the Mapn RESTful API! You can use our API to access Mapn API endpoints.
 
+** Geo
+All coordinates use [GeoJSON](http://geojson.org/) format
+
 # Authentication
 
 > To login, send a post request to `/auth/local` :
@@ -42,27 +45,12 @@ Mapn expects for the token to be included in all authenticated API requests to t
 You must replace <code>&lt;token&gt;</code> with your session token returned by /auth
 </aside>
 
-# Kittens
+# Pins
 
-## Get All Kittens
+## Get all pins near a location
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
-
-```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
+```Angular
+$http.get('http://example.com/api/pins');
 ```
 
 > The above command returns JSON structured like this:
@@ -70,38 +58,63 @@ curl "http://example.com/api/kittens"
 ```json
 [
   {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
+    "pin_id": 1356674,
+    "coordinates": [-77.69531, 33.578],
+    "name": "Bob's Burgers",
+    "hashtags": ["burger", "restaurant"],
+    "entries": [
+      {
+        "video_id": 123,
+        "title": "Best Burger in Town",
+        "url": "https://www.youtube.com/watch?v=GDcOfvVVyzE",
+        "description": "I had a #burger",
+        "likes": 523,
+        "dislikes": 1,
+        "hashtags": ["burger"]
+      },
+      { 
+        "video_id": 128,
+        "title": "Don't Eat Here",
+        "url": "https://www.youtube.com/watch?v=sz9ncrDlALQ",
+        "description": null,
+        "likes": 0,
+        "dislikes": 1,
+        "hashtags": null
+      }
+    ],
+    "bounties": null
   },
-  {
-    "id": 2,
-    "name": "Isis",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
+  { 
+    "pin_id": 1356676,
+    "coordinates": [-77.69535, 33.57823],
+    "name": "Super Zoo",
+    "hashtags": ["zoo", "lions", "tigers", "bears" ],
+    "entries": null,
+    "bounties": [
+      {
+        "title": "Make a video featuring our lions",
+        "reward": 5.00,
+        "active": true
+      }
+    ]
   }
 ]
 ```
 
-This endpoint retrieves all kittens.
+This endpoint retrieves all pins by searching in a given area.
 
 ### HTTP Request
 
-`GET http://example.com/api/kittens`
+`GET http://example.com/api/pins`
 
 ### Query Parameters
 
 Parameter | Default | Description
 --------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
+location | [0,0] | [lat, long] coordinates of the center of search area
+radius | 25000 | A integer that represents the radius of the search area. Maximum is 25000
 
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
+**This endpoint does not need to be authenticated**
 
 ## Get a Specific Kitten
 
