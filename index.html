@@ -38,6 +38,7 @@
       </div>
         <ul class="toc-footer">
             <li><a href='http://github.com/tripit/slate'>Documentation Powered by Slate</a></li>
+            <li><a href='https://github.com/Team-4B/Mapn-API'>Documentation Source</a></li>
         </ul>
     </div>
     <div class="page-wrapper">
@@ -47,8 +48,40 @@
 
 <p>Welcome to the Mapn RESTful API! You can use our API to access Mapn API endpoints.</p>
 
-<p>** Geo
-All coordinates use <a href="http://geojson.org/">GeoJSON</a> format</p>
+<h3 id="for-geo-locations-use-geojson-format">For geo locations, use <a href="http://geojson.org/">GeoJSON</a> format</h3>
+<pre class="highlight plaintext"><code>"geometry": {
+    "type": "Point",
+    "coordinates": [125.6, 10.1]
+  }
+</code></pre>
+
+<h3 id="please-url-encode-all-parameters">Please URL encode all parameters.</h3>
+
+<table><thead>
+<tr>
+<th>Search query</th>
+<th>URL encoded query</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>#grocery #food</td>
+<td>%23grocery+%23food</td>
+</tr>
+<tr>
+<td>hello world :)</td>
+<td>hello%20word%20%3A%29</td>
+</tr>
+<tr>
+<td>2015-09-26T19:47:03Z</td>
+<td>2015-09-26T19%3A47%3A03Z</td>
+</tr>
+</tbody></table>
+
+<p>Note: space character can be represented by + or %20.</p>
+
+<h3 id="all-datetime-objects-are-utc-values-represented-in-iso-8601-format">All datetime objects are UTC values represented in ISO-8601 format</h3>
+
+<p><code class="prettyprint">&quot;2015-09-26T19:47:03Z&quot;</code></p>
 
 <h1 id="authentication">Authentication</h1>
 
@@ -77,8 +110,19 @@ You must replace <code>&lt;token&gt;</code> with your session token returned by 
 
 <h1 id="pins">Pins</h1>
 
-<h2 id="get-all-pins-near-a-location">Get all pins near a location</h2>
-<pre class="highlight plaintext"><code>$http.get('http://example.com/api/pins');
+<h2 id="get-all-pins">Get all pins</h2>
+<pre class="highlight plaintext"><code>$http({
+    method: 'GET',
+    url: 'https://www.example.com/api/pins',
+    params: {
+        "limit": 10,
+        "location": "125.6,10.2",
+        "radius": 50
+    },
+    headers: {"Authorization": "Bearer xxxxYYYYZzzz"}
+}).success(function(data){
+    // With the data succesfully returned, do something
+});
 </code></pre>
 
 <blockquote>
@@ -87,18 +131,19 @@ You must replace <code>&lt;token&gt;</code> with your session token returned by 
 <pre class="highlight json"><code><span class="p">[</span><span class="w">
   </span><span class="p">{</span><span class="w">
     </span><span class="nt">"pin_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1356674</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"coordinates"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">-77.69531</span><span class="p">,</span><span class="w"> </span><span class="mf">33.578</span><span class="p">],</span><span class="w">
+    </span><span class="nt">"geo"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Point"</span><span class="p">,</span><span class="w"> </span><span class="nt">"coordinates"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">125.6</span><span class="p">,</span><span class="w"> </span><span class="mf">10.1</span><span class="p">]</span><span class="w"> </span><span class="p">},</span><span class="w">
     </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bob's Burgers"</span><span class="p">,</span><span class="w">
     </span><span class="nt">"hashtags"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"burger"</span><span class="p">,</span><span class="w"> </span><span class="s2">"restaurant"</span><span class="p">],</span><span class="w">
     </span><span class="nt">"entries"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
       </span><span class="p">{</span><span class="w">
         </span><span class="nt">"video_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">123</span><span class="p">,</span><span class="w">
         </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Best Burger in Town"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.youtube.com/watch?v=GDcOfvVVyzE"</span><span class="p">,</span><span class="w">
+ </span><span class="err">G</span><span class="w">       </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.youtube.com/watch?v=GDcOfvVVyzE"</span><span class="p">,</span><span class="w">
         </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"I had a #burger"</span><span class="p">,</span><span class="w">
         </span><span class="nt">"likes"</span><span class="p">:</span><span class="w"> </span><span class="mi">523</span><span class="p">,</span><span class="w">
         </span><span class="nt">"dislikes"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"hashtags"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"burger"</span><span class="p">]</span><span class="w">
+        </span><span class="nt">"hashtags"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"burger"</span><span class="p">],</span><span class="w">
+        </span><span class="nt">"posted_on"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-09-26T19:47:03Z"</span><span class="w">
       </span><span class="p">},</span><span class="w">
       </span><span class="p">{</span><span class="w"> 
         </span><span class="nt">"video_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w">
@@ -107,14 +152,15 @@ You must replace <code>&lt;token&gt;</code> with your session token returned by 
         </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
         </span><span class="nt">"likes"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
         </span><span class="nt">"dislikes"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"hashtags"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+        </span><span class="nt">"hashtags"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"posted_on"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-09-26T20:47:03Z"</span><span class="w">
       </span><span class="p">}</span><span class="w">
     </span><span class="p">],</span><span class="w">
     </span><span class="nt">"bounties"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
   </span><span class="p">},</span><span class="w">
   </span><span class="p">{</span><span class="w"> 
     </span><span class="nt">"pin_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1356676</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"coordinates"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">-77.69535</span><span class="p">,</span><span class="w"> </span><span class="mf">33.57823</span><span class="p">],</span><span class="w">
+    </span><span class="nt">"coordinates"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Point"</span><span class="p">,</span><span class="w"> </span><span class="nt">"coordinates"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">125.62</span><span class="p">,</span><span class="w"> </span><span class="mf">10.1</span><span class="p">]</span><span class="w"> </span><span class="p">},</span><span class="w">
     </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Super Zoo"</span><span class="p">,</span><span class="w">
     </span><span class="nt">"hashtags"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"zoo"</span><span class="p">,</span><span class="w"> </span><span class="s2">"lions"</span><span class="p">,</span><span class="w"> </span><span class="s2">"tigers"</span><span class="p">,</span><span class="w"> </span><span class="s2">"bears"</span><span class="w"> </span><span class="p">],</span><span class="w">
     </span><span class="nt">"entries"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
@@ -122,14 +168,19 @@ You must replace <code>&lt;token&gt;</code> with your session token returned by 
       </span><span class="p">{</span><span class="w">
         </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Make a video featuring our lions"</span><span class="p">,</span><span class="w">
         </span><span class="nt">"reward"</span><span class="p">:</span><span class="w"> </span><span class="mf">5.00</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+        </span><span class="nt">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"posted_on"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-09-26T19:47:03Z"</span><span class="w">
       </span><span class="p">}</span><span class="w">
     </span><span class="p">]</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">]</span><span class="w">
 </span></code></pre>
 
-<p>This endpoint retrieves all pins by searching in a given area.</p>
+<p>This endpoint retrieves all pins by searching via parameters. 
+If no parameters are specified, the 25 newest pins are returned.
+It is highly recommended to specify a location and radius on every request.</p>
+
+<p>Please be aware that a max of 200 pins can be returned in a single request.</p>
 
 <h3 id="http-request">HTTP Request</h3>
 
@@ -146,19 +197,46 @@ You must replace <code>&lt;token&gt;</code> with your session token returned by 
 </thead><tbody>
 <tr>
 <td>location</td>
-<td>[0,0]</td>
-<td>[lat, long] coordinates of the center of search area</td>
+<td></td>
+<td>Used to search via lat,lng. <strong>Example</strong> 37.781157,-122.398720</td>
 </tr>
 <tr>
 <td>radius</td>
-<td>25000</td>
-<td>A integer that represents the radius of the search area. Maximum is 25000</td>
+<td></td>
+<td>A integer in meters that is used with <code class="prettyprint">location</code> to search via lat,lng. <strong>Maximum is 25000</strong></td>
+</tr>
+<tr>
+<td>hashtag</td>
+<td></td>
+<td>Search by hashtag. <strong>Example</strong> #hello #world</td>
+</tr>
+<tr>
+<td>since</td>
+<td></td>
+<td>Show items with timestamp <em>after</em> an ISO-8601 datetime</td>
+</tr>
+<tr>
+<td>until</td>
+<td></td>
+<td>Show items with timestamp <em>before</em> an ISO-8601 datetime</td>
+</tr>
+<tr>
+<td>count</td>
+<td>25</td>
+<td>Specify number of pins to return. <strong>Maximum is 200</strong></td>
+</tr>
+<tr>
+<td>bounties_only</td>
+<td>false</td>
+<td>When set to <code class="prettyprint">1</code> or <code class="prettyprint">true</code>, only returns pins with an active bounty</td>
 </tr>
 </tbody></table>
 
-<p><strong>This endpoint does not need to be authenticated</strong></p>
+<p><strong>This request does not need to be authenticated</strong></p>
 
 <h2 id="get-a-specific-pin">Get a Specific Pin</h2>
+
+<p>$http.get(&lsquo;http://example.com/api/pins/1356674&rsquo;);</p>
 
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
@@ -197,9 +275,7 @@ You must replace <code>&lt;token&gt;</code> with your session token returned by 
 
           <h1 id="errors">Errors</h1>
 
-<aside class="notice">This error section is stored in a separate file in `includes/_errors.md`. Slate allows you to optionally separate out your docs into many files&hellip;just save them to the `includes` folder and add them to the top of your `index.md`&rsquo;s frontmatter. Files are included in the order listed.</aside>
-
-<p>The Kittn API uses the following error codes:</p>
+<p>The Mapn API uses the following error codes:</p>
 
 <table><thead>
 <tr>
@@ -213,35 +289,27 @@ You must replace <code>&lt;token&gt;</code> with your session token returned by 
 </tr>
 <tr>
 <td>401</td>
-<td>Unauthorized &ndash; Your API key is wrong</td>
+<td>Unauthorized &ndash; Your authentication token is wrong</td>
 </tr>
 <tr>
 <td>403</td>
-<td>Forbidden &ndash; The kitten requested is hidden for administrators only</td>
+<td>Forbidden &ndash; You don&rsquo;t have permission</td>
 </tr>
 <tr>
 <td>404</td>
-<td>Not Found &ndash; The specified kitten could not be found</td>
+<td>Not Found &ndash; The specified thing could not be found</td>
 </tr>
 <tr>
 <td>405</td>
-<td>Method Not Allowed &ndash; You tried to access a kitten with an invalid method</td>
+<td>Method Not Allowed &ndash; You tried to access a thing with an invalid method</td>
 </tr>
 <tr>
 <td>406</td>
 <td>Not Acceptable &ndash; You requested a format that isn&rsquo;t json</td>
 </tr>
 <tr>
-<td>410</td>
-<td>Gone &ndash; The kitten requested has been removed from our servers</td>
-</tr>
-<tr>
-<td>418</td>
-<td>I&rsquo;m a teapot</td>
-</tr>
-<tr>
 <td>429</td>
-<td>Too Many Requests &ndash; You&rsquo;re requesting too many kittens! Slow down!</td>
+<td>Too Many Requests &ndash; You&rsquo;re requesting too many things! Slow down!</td>
 </tr>
 <tr>
 <td>500</td>
