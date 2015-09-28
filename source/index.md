@@ -20,12 +20,9 @@ Welcome to the Mapn RESTful API! You can use our API to access Mapn API endpoint
 
 ### For geo locations, use [GeoJSON](http://geojson.org/) format
 
-```JSON
-"geometry": {
-    "type": "Point",
-    "coordinates": [125.6, 10.1]
-  }
-```
+`"geometry": { "type": "Point", "coordinates": [125.6, 10.1]}`
+
+Where coordinates are in the format `[lat, lng]`
 
 ### Please URL encode all parameters.
 
@@ -162,7 +159,9 @@ bounties_only | false | When set to `1` or `true`, only returns pins with an act
 
 ## Get a Specific Pin
 
+```Angular
 $http.get('http://example.com/api/pins/1356674');
+```
 
 > The above command returns JSON structured like this:
 
