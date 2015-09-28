@@ -17,8 +17,28 @@ search: true
 
 Welcome to the Mapn RESTful API! You can use our API to access Mapn API endpoints.
 
-** Geo
-All coordinates use [GeoJSON](http://geojson.org/) format
+### For geo locations, use [GeoJSON](http://geojson.org/) format
+
+```JSON
+"geometry": {
+    "type": "Point",
+    "coordinates": [125.6, 10.1]
+  }
+```
+
+### Please URL encode all parameters.
+
+| Search query | URL encoded query |
+| ------------ | ----------------- |
+| #grocery #food | %23grocery+%23food |
+| hello world :) | hello%20word%20%3A%29 |
+| 2015-09-26T19:47:03Z | 2015-09-26T19%3A47%3A03Z |
+
+Note: space character can be represented by + or %20.
+
+### All datetime objects are UTC values represented in ISO-8601 format
+
+`"2015-09-26T19:47:03Z"`
 
 # Authentication
 
@@ -47,10 +67,21 @@ You must replace <code>&lt;token&gt;</code> with your session token returned by 
 
 # Pins
 
-## Get all pins near a location
+## Get all pins
 
 ```Angular
-$http.get('http://example.com/api/pins');
+$http({
+    method: 'GET',
+    url: 'https://www.example.com/api/pins',
+    params: {
+        "limit": 10,
+        "location": "125.6,10.2",
+        "radius": 50
+    },
+    headers: {"Authorization": "Bearer xxxxYYYYZzzz"}
+}).success(function(data){
+    // With the data succesfully returned, do something
+});
 ```
 
 > The above command returns JSON structured like this:
@@ -59,18 +90,19 @@ $http.get('http://example.com/api/pins');
 [
   {
     "pin_id": 1356674,
-    "coordinates": [-77.69531, 33.578],
+    "geo": { "type": "Point", "coordinates": [125.6, 10.1] },
     "name": "Bob's Burgers",
     "hashtags": ["burger", "restaurant"],
     "entries": [
       {
         "video_id": 123,
         "title": "Best Burger in Town",
-        "url": "https://www.youtube.com/watch?v=GDcOfvVVyzE",
+ G       "url": "https://www.youtube.com/watch?v=GDcOfvVVyzE",
         "description": "I had a #burger",
         "likes": 523,
         "dislikes": 1,
-        "hashtags": ["burger"]
+        "hashtags": ["burger"],
+        "posted_on": "2015-09-26T19:47:03Z"
       },
       { 
         "video_id": 128,
@@ -79,14 +111,15 @@ $http.get('http://example.com/api/pins');
         "description": null,
         "likes": 0,
         "dislikes": 1,
-        "hashtags": null
+        "hashtags": null,
+        "posted_on": "2015-09-26T20:47:03Z"
       }
     ],
     "bounties": null
   },
   { 
     "pin_id": 1356676,
-    "coordinates": [-77.69535, 33.57823],
+    "coordinates": { "type": "Point", "coordinates": [125.62, 10.1] },
     "name": "Super Zoo",
     "hashtags": ["zoo", "lions", "tigers", "bears" ],
     "entries": null,
@@ -94,14 +127,19 @@ $http.get('http://example.com/api/pins');
       {
         "title": "Make a video featuring our lions",
         "reward": 5.00,
-        "active": true
+        "active": true,
+        "posted_on": "2015-09-26T19:47:03Z"
       }
     ]
   }
 ]
 ```
 
-This endpoint retrieves all pins by searching in a given area.
+This endpoint retrieves all pins by searching via parameters. 
+If no parameters are specified, the 25 newest pins are returned.
+It is highly recommended to specify a location and radius on every request.
+
+Please be aware that a max of 200 pins can be returned in a single request.
 
 ### HTTP Request
 
@@ -111,12 +149,19 @@ This endpoint retrieves all pins by searching in a given area.
 
 Parameter | Default | Description
 --------- | ------- | -----------
-location | [0,0] | [lat, long] coordinates of the center of search area
-radius | 25000 | A integer that represents the radius of the search area. Maximum is 25000
+location  |         | Used to search via lat,lng. **Example** 37.781157,-122.398720
+radius    |         | A integer in meters that is used with `location` to search via lat,lng. **Maximum is 25000**
+hashtag   |         | Search by hashtag. **Example** #hello #world
+since     |         | Show items with timestamp *after* an ISO-8601 datetime 
+until     |         | Show items with timestamp *before* an ISO-8601 datetime
+count     |   25    | Specify number of pins to return. **Maximum is 200**
+bounties_only | false | When set to `1` or `true`, only returns pins with an active bounty
 
-**This endpoint does not need to be authenticated**
+**This request does not need to be authenticated**
 
 ## Get a Specific Pin
+
+$http.get('http://example.com/api/pins/1356674');
 
 > The above command returns JSON structured like this:
 
