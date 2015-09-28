@@ -49,11 +49,10 @@
 <p>Welcome to the Mapn RESTful API! You can use our API to access Mapn API endpoints.</p>
 
 <h3 id="for-geo-locations-use-geojson-format">For geo locations, use <a href="http://geojson.org/">GeoJSON</a> format</h3>
-<pre class="highlight plaintext"><code>"geometry": {
-    "type": "Point",
-    "coordinates": [125.6, 10.1]
-  }
-</code></pre>
+
+<p><code class="prettyprint">&quot;geometry&quot;: { &quot;type&quot;: &quot;Point&quot;, &quot;coordinates&quot;: [125.6, 10.1]}</code></p>
+
+<p>Where coordinates are in the format <code class="prettyprint">[lat, lng]</code></p>
 
 <h3 id="please-url-encode-all-parameters">Please URL encode all parameters.</h3>
 
@@ -235,8 +234,8 @@ It is highly recommended to specify a location and radius on every request.</p>
 <p><strong>This request does not need to be authenticated</strong></p>
 
 <h2 id="get-a-specific-pin">Get a Specific Pin</h2>
-
-<p>$http.get(&lsquo;http://example.com/api/pins/1356674&rsquo;);</p>
+<pre class="highlight plaintext"><code>$http.get('http://example.com/api/pins/1356674');
+</code></pre>
 
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
