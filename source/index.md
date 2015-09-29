@@ -95,7 +95,7 @@ $http({
       {
         "video_id": 123,
         "title": "Best Burger in Town",
- G       "url": "https://www.youtube.com/watch?v=GDcOfvVVyzE",
+        "url": "https://www.youtube.com/watch?v=GDcOfvVVyzE",
         "description": "I had a #burger",
         "likes": 523,
         "dislikes": 1,
@@ -189,3 +189,47 @@ This endpoint retrieves a specific pin.
 Parameter | Description
 --------- | -----------
 ID | The ID of the pin to retrieve
+
+## Create or update a pin
+
+This endpoint allows you to create or updated pins.
+The payload must be a valid JSON object.
+The payload is returned on success with an id
+
+```Angular
+payload = {
+  "coordinates": [-77.69531, 33.578],
+  "name": "Bob's Burgers",
+  "hashtags": ["burger", "restaurant"]
+};
+$http.post('http://example.com/api/pins/1356674', payload);
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+  "pin_id": 1356674,
+  "coordinates": [-77.69531, 33.578],
+  "name": "Bob's Burgers",
+  "hashtags": ["burger", "restaurant"],
+  "entries": null,
+  "bounties": null
+}
+```
+
+
+### HTTP Request
+
+`POST http://example.com/api/pin/<ID>`
+
+### URL Parameters
+
+Parameter | Description
+--------- | -----------
+ID | (optional) The ID of the pin to edit. If none is specified, creates a new pin
+
+<aside class="warning">
+    Note that some pins will return 403 Forbidden if they are hidden
+    or you don't have permission to edit them
+</aside>
