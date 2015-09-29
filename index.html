@@ -137,7 +137,7 @@ You must replace <code>&lt;token&gt;</code> with your session token returned by 
       </span><span class="p">{</span><span class="w">
         </span><span class="nt">"video_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">123</span><span class="p">,</span><span class="w">
         </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Best Burger in Town"</span><span class="p">,</span><span class="w">
- </span><span class="err">G</span><span class="w">       </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.youtube.com/watch?v=GDcOfvVVyzE"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.youtube.com/watch?v=GDcOfvVVyzE"</span><span class="p">,</span><span class="w">
         </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"I had a #burger"</span><span class="p">,</span><span class="w">
         </span><span class="nt">"likes"</span><span class="p">:</span><span class="w"> </span><span class="mi">523</span><span class="p">,</span><span class="w">
         </span><span class="nt">"dislikes"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
@@ -271,6 +271,55 @@ It is highly recommended to specify a location and radius on every request.</p>
 <td>The ID of the pin to retrieve</td>
 </tr>
 </tbody></table>
+
+<h2 id="create-or-update-a-pin">Create or update a pin</h2>
+
+<p>This endpoint allows you to create or updated pins.
+The payload must be a valid JSON object.
+The payload is returned on success with an id</p>
+<pre class="highlight plaintext"><code>payload = {
+  "coordinates": [-77.69531, 33.578],
+  "name": "Bob's Burgers",
+  "hashtags": ["burger", "restaurant"]
+};
+$http.post('http://example.com/api/pins/1356674', payload);
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"pin_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1356674</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"coordinates"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">-77.69531</span><span class="p">,</span><span class="w"> </span><span class="mf">33.578</span><span class="p">],</span><span class="w">
+  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bob's Burgers"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"hashtags"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"burger"</span><span class="p">,</span><span class="w"> </span><span class="s2">"restaurant"</span><span class="p">],</span><span class="w">
+  </span><span class="nt">"entries"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"bounties"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">POST http://example.com/api/pin/&lt;ID&gt;</code></p>
+
+<h3 id="url-parameters">URL Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>ID</td>
+<td>(optional) The ID of the pin to edit. If none is specified, creates a new pin</td>
+</tr>
+</tbody></table>
+
+<aside class="warning">
+    Note that some pins will return 403 Forbidden if they are hidden
+    or you don&rsquo;t have permission to edit them
+</aside>
 
           <h1 id="errors">Errors</h1>
 
